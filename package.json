@@ -7,8 +7,9 @@
     "dev": "nodemon --watch 'src/' --exec 'ts-node src/index.ts' -e ts",
     "prepare": "husky",
     "test": "jest --passWithNoTests",
-    "test:watch": "npm test --watch",
-    "test:staged": "npm test --findRelatedTests"
+    "test:watch": "npm test -- --watch",
+    "test:staged": "npm test -- --findRelatedTests",
+    "test:push": "npm test -- --coverage"
   },
   "lint-staged": {
     "*.ts": [
