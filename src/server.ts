@@ -2,6 +2,7 @@ import * as express from "express"
 import cors = require("cors")
 import { Request, Response } from "express"
 import { config } from "dotenv"
+import { connectDatabase } from "./database/database"
 
 config()
 
@@ -16,5 +17,6 @@ server.get("/v1", (req: Request, res: Response) =>
 )
 
 server.listen(PORT, () => console.log(`Server is running on port ${PORT}`))
+connectDatabase()
 
 export default server
