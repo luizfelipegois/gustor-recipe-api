@@ -168,6 +168,7 @@ DBUSER=username
 DBPASSWORD=yourpassword
 DBCOLLECTION=yourcollection
 ```
+#### If you don't already have a database generated in mongodb, connect to the <a href="https://www.mongodb.com/">official website</a> and create your database, obtaining its url with connection data.
 
 ## Running tests
 
