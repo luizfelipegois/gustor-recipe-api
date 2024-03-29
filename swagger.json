@@ -1,0 +1,340 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API documentation setup",
+    "description": "Here you have all the API documentation, with crud and routes necessary to perform the application services",
+    "contact": {
+      "name": "API Support",
+      "email": "youremail@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/v1",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/auth/signup": {
+      "post": {
+        "description": "Register a new user in the database",
+        "requestBody": {
+          "description": "Data expected to register a user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUserRegistration"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserRegistration"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": true,
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Invalid or already registered email",
+                      "example": "Invalid or already registered email"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/signin": {
+      "post": {
+        "description": "Authenticates the user if the information is correct",
+        "requestBody": {
+          "description": "Data expected to authenticate a user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUserAuthentication"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserAuthentication"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": true,
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "User not found",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": true,
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Invalid credentials",
+                      "example": "Invalid credentials"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "description": "Get user data",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "User Id",
+            "required": true,
+            "type": "string",
+            "format": "ObjectId"
+          }
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUser"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": true,
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Token not provided",
+                      "example": "Token not provided"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": true,
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "ID not provided",
+                      "example": "ID not provided"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean",
+                      "description": true,
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "description": "Invalid or mismatched ID",
+                      "example": "Invalid or mismatched ID"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RequestUserRegistration": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's full name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email address"
+          },
+          "password": {
+            "type": "string",
+            "description": "Access password for the user to authenticate"
+          }
+        },
+        "required": ["name", "email", "password"]
+      },
+      "RequestUserAuthentication": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User email address"
+          },
+          "password": {
+            "type": "string",
+            "description": "Access password for the user to authenticate"
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "ResponseUserRegistration": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "boolean",
+            "description": false,
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "description": "Message user registered successfully",
+            "example": "User registered successfully"
+          }
+        }
+      },
+      "ResponseUserAuthentication": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "description": "Token with user authentication data",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1ZmNhM2M4M2NiNTE0ZjRmMzJjNDA4NyIsImlzQWRtaW4iOmZhbHNlLCJuYW1lIjoiTHVpeiIsImlhdCI6MTcxMTMwNTc0MSwiZXhwIjoxNzExMzA5MzQxfQ.Uaw-8zzo1nDVHeAfiErYbPTLWYCTfoGhVWQaoVvHm*4"
+          },
+          "error": {
+            "type": "boolean",
+            "description": "Indication that there was no error in the request",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "description": "Indication that there was no error in the request",
+            "example": "User logged in successfully"
+          }
+        }
+      },
+      "ResponseUser": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "description": "User data",
+            "example": {
+              "_id": "65fca3c83cb514f4f32c4087",
+              "name": "Username",
+              "email": "youremail@gmail.com",
+              "isAdmin": false,
+              "createdAt": "2024-03-21T21:16:56.999Z",
+              "updatedAt": "2024-03-21T21:16:56.999Z",
+              "__v": 0
+            }
+          },
+          "error": {
+            "type": "boolean",
+            "description": "Indication that there was no error in the request",
+            "example": false
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "description": "Authentication with JWT token",
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
