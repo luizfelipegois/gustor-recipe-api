@@ -1,6 +1,6 @@
 import { model, Schema } from "mongoose"
 import bcrypt = require("bcrypt")
-import { UserDocument } from "../types/types"
+import { UserDocument } from "../types/user.types"
 
 class UserModel {
   private userModel = model<UserDocument>(

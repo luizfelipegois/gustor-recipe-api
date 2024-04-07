@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import { Credentials } from "../types/types"
+import { Credentials } from "../types/user.types"
 import { userModel } from "../models/user.model"
 import bcrypt = require("bcrypt")
 import { HTTP_STATUS } from "../helpers/constants"
