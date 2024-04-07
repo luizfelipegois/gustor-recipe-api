@@ -39,6 +39,12 @@ class RecipeModel {
   public async findRecipeById(id: string): Promise<RecipeDocument | null> {
     return await this.recipeModel.findById(id)
   }
+
+  public async findRecipeByTitle(
+    title: string,
+  ): Promise<RecipeDocument | null> {
+    return await this.recipeModel.findOne({ title })
+  }
 }
 
 export const recipeModel = new RecipeModel()
