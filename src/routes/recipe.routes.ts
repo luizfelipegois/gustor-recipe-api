@@ -10,4 +10,6 @@ router.post("/create", isAdmin, verifyToken, checkRecipe, (req, res) =>
   recipeService.register(req, res),
 )
 
+router.get("/find", (req, res) => recipeService.findAll(req, res))
+
 export default router

@@ -14,4 +14,17 @@ export default class RecipeService {
       errorHandler(res, error as Error)
     }
   }
+
+  public async findAll(req: Request, res: Response): Promise<void> {
+    try {
+      const response = await recipeModel.findAllRecipes()
+      res.status(HTTP_STATUS.OK).json({
+        message: `Total recipes found: ${response.length}`,
+        recipes: response,
+        error: false,
+      })
+    } catch (error) {
+      errorHandler(res, error as Error)
+    }
+  }
 }

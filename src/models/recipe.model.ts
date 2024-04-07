@@ -36,14 +36,18 @@ class RecipeModel {
     return await newRecipe.save()
   }
 
+  public async findAllRecipes(): Promise<RecipeDocument[]> {
+    return await this.recipeModel.find().lean().exec()
+  }
+
   public async findRecipeById(id: string): Promise<RecipeDocument | null> {
-    return await this.recipeModel.findById(id)
+    return await this.recipeModel.findById(id).lean().exec()
   }
 
   public async findRecipeByTitle(
     title: string,
   ): Promise<RecipeDocument | null> {
-    return await this.recipeModel.findOne({ title })
+    return await this.recipeModel.findOne({ title }).lean().exec()
   }
 }
 
