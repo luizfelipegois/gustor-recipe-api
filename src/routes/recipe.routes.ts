@@ -6,7 +6,7 @@ import { checkRecipe } from "../middlewares/recipe.middleware"
 const router: Router = Router()
 const recipeService = new RecipeService()
 
-router.post("/", isAdmin, verifyToken, checkRecipe, (req, res) =>
+router.post("/create", isAdmin, verifyToken, checkRecipe, (req, res) =>
   recipeService.register(req, res),
 )
 
