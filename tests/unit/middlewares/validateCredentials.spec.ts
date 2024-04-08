@@ -26,10 +26,12 @@ describe("Test responses to user signIn middleware", () => {
   })
 
   it("should return 401 with error message if user not found", async () => {
-    const response = await request(server).post("/v1/auth/signin").send({
-      email: mockado.email(),
-      password: mockado.password(),
-    })
+    const response = await request(server)
+      .post("/v1/auth/signin")
+      .send({
+        email: mockado.email({ numbers: true }),
+        password: mockado.password(),
+      })
 
     expect(response.status).toBe(HTTP_STATUS.UNAUTHORIZED)
     expect(response.body).toHaveProperty("message", "User not found")
@@ -39,8 +41,8 @@ describe("Test responses to user signIn middleware", () => {
   it("should return 401 with error message if invalid password", async () => {
     const userCredentials = {
       fullName: mockado.name({ type: "fullName" }),
-      email: mockado.email(),
-      password: "Test@12345678?",
+      email: mockado.email({ numbers: true }),
+      password: mockado.password(),
     }
 
     await request(server).post("/v1/auth/signup").send(userCredentials)

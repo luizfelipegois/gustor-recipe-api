@@ -40,7 +40,7 @@ describe("Test responses to user signUp middleware", () => {
   it("should return 400 with error message if Email already registered", async () => {
     const userCredentials = {
       fullName: mockado.name({ type: "fullName", gender: "male" }),
-      email: mockado.email(),
+      email: mockado.email({ numbers: true }),
       password: mockado.password({
         length: 20,
         letters: true,
@@ -65,7 +65,7 @@ describe("Test responses to user signUp middleware", () => {
   it("should return 400 with error message if Invalid password format", async () => {
     const userCredentials = {
       fullName: mockado.name({ type: "fullName", gender: "female" }),
-      email: mockado.email(),
+      email: mockado.email({ numbers: true }),
       password: mockado.password({
         length: 20,
         letters: true,

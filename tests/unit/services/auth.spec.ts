@@ -17,7 +17,7 @@ describe("Test responses to user signUp", () => {
   it("should return 201 with User created successfully message", async () => {
     const userCredentials = {
       fullName: mockado.name({ type: "fullName" }),
-      email: mockado.email(),
+      email: mockado.email({ numbers: true }),
       password: mockado.password({
         length: 20,
         letters: true,
@@ -41,8 +41,14 @@ describe("Test responses to user signIn", () => {
   it("should return the status code 200 and a json with the authentication token", async () => {
     const userCredentials = {
       fullName: mockado.name({ type: "fullName" }),
-      email: mockado.email(),
-      password: "Test@12345678?",
+      email: mockado.email({ numbers: true }),
+      password: mockado.password({
+        length: 20,
+        letters: true,
+        capitalLetters: true,
+        numbers: true,
+        specialCharacters: true,
+      }),
     }
 
     await request(server).post("/v1/auth/signup").send(userCredentials)
