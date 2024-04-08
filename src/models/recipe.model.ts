@@ -40,6 +40,28 @@ class RecipeModel {
     return await this.recipeModel.find().lean().exec()
   }
 
+  public async findRecipesByCategory(
+    queryCategory: string,
+  ): Promise<RecipeDocument[]> {
+    return await this.recipeModel
+      .find({
+        categories: {
+          $in: [queryCategory],
+        },
+      })
+      .lean()
+      .exec()
+  }
+
+  public async findNewsRecipes(): Promise<RecipeDocument[]> {
+    return await this.recipeModel
+      .find()
+      .sort({ createdAt: -1 })
+      .limit(1)
+      .lean()
+      .exec()
+  }
+
   public async findRecipeById(id: string): Promise<RecipeDocument | null> {
     return await this.recipeModel.findById(id).lean().exec()
   }
@@ -48,6 +70,17 @@ class RecipeModel {
     title: string,
   ): Promise<RecipeDocument | null> {
     return await this.recipeModel.findOne({ title }).lean().exec()
+  }
+
+  public async updateRecipe(
+    id: string,
+    recipeData: RecipeDocument,
+  ): Promise<RecipeDocument | null> {
+    return await this.recipeModel.findByIdAndUpdate(
+      id,
+      { $set: recipeData },
+      { new: true },
+    )
   }
 }
 

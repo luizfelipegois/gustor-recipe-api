@@ -3,7 +3,7 @@ import { HTTP_STATUS } from "../helpers/constants"
 import { recipeModel } from "../models/recipe.model"
 import { errorHandler } from "../helpers/error"
 
-export async function checkRecipe(
+export async function checkRecipeTitle(
   req: Request,
   res: Response,
   next: NextFunction,
@@ -17,6 +17,20 @@ export async function checkRecipe(
         .json({ message: "Title not provided", error: true })
       return
     }
+
+    next()
+  } catch (error) {
+    errorHandler(res, error as Error)
+  }
+}
+
+export async function duplicateTitleArrives(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
+  try {
+    const { title } = req.body
 
     const recipe = await recipeModel.findRecipeByTitle(title)
 
