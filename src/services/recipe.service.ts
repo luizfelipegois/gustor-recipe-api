@@ -27,4 +27,17 @@ export default class RecipeService {
       errorHandler(res, error as Error)
     }
   }
+
+  public async findById(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params
+      const response = await recipeModel.findRecipeById(id)
+      res.status(HTTP_STATUS.OK).json({
+        recipe: response,
+        error: false,
+      })
+    } catch (error) {
+      errorHandler(res, error as Error)
+    }
+  }
 }
