@@ -82,6 +82,10 @@ class RecipeModel {
       { new: true },
     )
   }
+
+  public async deleteRecipe(id: string): Promise<RecipeDocument | null> {
+    return await this.recipeModel.findByIdAndDelete(id).lean().exec()
+  }
 }
 
 export const recipeModel = new RecipeModel()

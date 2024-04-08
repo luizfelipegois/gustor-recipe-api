@@ -64,4 +64,17 @@ export default class RecipeService {
       errorHandler(res, error as Error)
     }
   }
+
+  public async delete(req: Request, res: Response): Promise<void> {
+    try {
+      const { id } = req.params
+      await recipeModel.deleteRecipe(id)
+      res.status(HTTP_STATUS.OK).json({
+        message: "Recipe deleted successfully",
+        error: false,
+      })
+    } catch (error) {
+      errorHandler(res, error as Error)
+    }
+  }
 }

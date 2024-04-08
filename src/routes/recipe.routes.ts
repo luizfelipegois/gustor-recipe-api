@@ -26,5 +26,8 @@ router.put(
   verifyToken,
   (req, res) => recipeService.update(req, res),
 )
+router.delete("/delete/:id", isAdmin, verifyToken, (req, res) =>
+  recipeService.delete(req, res),
+)
 
 export default router
