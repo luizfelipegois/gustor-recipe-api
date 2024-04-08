@@ -39,7 +39,7 @@ describe("Test responses to user signUp middleware", () => {
   })
   it("should return 400 with error message if Email already registered", async () => {
     const userCredentials = {
-      fullName: mockado.name({ type: "fullName", gender: "male" }),
+      fullName: mockado.name({ type: "fullName" }),
       email: mockado.email({ numbers: true }),
       password: mockado.password({
         length: 20,

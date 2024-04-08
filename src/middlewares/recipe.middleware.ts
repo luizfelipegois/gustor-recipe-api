@@ -46,3 +46,26 @@ export async function duplicateTitleArrives(
     errorHandler(res, error as Error)
   }
 }
+
+export async function checkID(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
+  try {
+    const { id } = req.params
+
+    const recipe = await recipeModel.findRecipeById(id)
+
+    if (!recipe) {
+      res
+        .status(HTTP_STATUS.NOT_FOUND)
+        .json({ message: "Recipe not found", error: true })
+      return
+    }
+
+    next()
+  } catch (error) {
+    errorHandler(res, error as Error)
+  }
+}
