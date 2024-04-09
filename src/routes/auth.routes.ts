@@ -1,20 +1,21 @@
 import { Router } from "express"
 import AuthService from "../services/auth.service"
-import {
-  checkEmailIsValid,
-  checkFullNameIsValid,
-  checkPasswordIsValid,
-} from "../middlewares/validateUserInputs.middlewares"
-import { validateCredentials } from "../middlewares/validateCredentials.middlewares"
+import authMiddlewares from "../middlewares/auth.middleware"
 
 const router: Router = Router()
 const authService = new AuthService()
+const {
+  validateFullName,
+  validateEmail,
+  validatePassword,
+  validateCredentials,
+} = authMiddlewares
 
 router.post(
   "/signup",
-  checkFullNameIsValid,
-  checkEmailIsValid,
-  checkPasswordIsValid,
+  validateFullName,
+  validateEmail,
+  validatePassword,
   (req, res) => authService.register(req, res),
 )
 router.post("/signin", validateCredentials, (req, res) =>

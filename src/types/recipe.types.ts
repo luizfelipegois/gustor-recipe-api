@@ -1,8 +1,8 @@
 import { Document } from "mongoose"
 
-interface Ingredient {
+export interface Ingredient {
   name: string
-  amount: number
+  amount: string
 }
 
 interface Assessment {
@@ -10,7 +10,7 @@ interface Assessment {
   note: number
 }
 
-interface Step {
+export interface Step {
   title: string
   text: string
 }
@@ -24,5 +24,17 @@ export interface RecipeDocument extends Document {
   categories: string[]
   ingredients: Ingredient[]
   assessments: Assessment[]
+  steps: Step[]
+}
+
+export interface RequestBody {
+  title: string
+  description: string
+  image: string
+  preparationTime: string
+  calories: string
+  categories: string[]
+  ingredients: Ingredient[]
+  assessments: []
   steps: Step[]
 }

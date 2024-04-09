@@ -13,12 +13,13 @@ class RecipeModel {
         calories: { type: String, required: true },
         categories: { type: [String], required: true },
         ingredients: {
-          type: [{ name: String, amount: Number }],
+          type: [{ name: String, amount: String }],
           required: true,
         },
         assessments: {
           type: [{ evaluator: String, note: Number }],
           required: true,
+          default: [],
         },
         steps: {
           type: [{ title: String, text: String }],

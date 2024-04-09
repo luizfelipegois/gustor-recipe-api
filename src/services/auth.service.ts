@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
 import jwt = require("jsonwebtoken")
-import { userModel } from "../models/user.model"
 import { config } from "dotenv"
+import { userModel } from "../models/user.model"
 import { HTTP_STATUS } from "../helpers/constants"
 import { errorHandler } from "../helpers/error"
 

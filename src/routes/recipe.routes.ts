@@ -1,34 +1,33 @@
 import { Router } from "express"
 import RecipeService from "../services/recipe.service"
-import { isAdmin, verifyToken } from "../middlewares/validateToken.middleware"
-import {
-  checkID,
-  checkRecipeTitle,
-  duplicateTitleArrives,
-} from "../middlewares/recipe.middleware"
+import authMiddlewares from "../middlewares/auth.middleware"
+import RecipeMiddlewares from "../middlewares/recipe.middleware"
 
 const router: Router = Router()
 const recipeService = new RecipeService()
+const { checkID, checkIfYouHaveMandatoryFields, duplicateTitleArrives } =
+  RecipeMiddlewares
+const { verifyAdmin, verifyToken } = authMiddlewares
 
 router.post(
   "/create",
-  isAdmin,
   verifyToken,
+  verifyAdmin,
+  checkIfYouHaveMandatoryFields,
   duplicateTitleArrives,
-  checkRecipeTitle,
   (req, res) => recipeService.register(req, res),
 )
 router.get("/find", (req, res) => recipeService.findAll(req, res))
 router.get("/find/:id", checkID, (req, res) => recipeService.findById(req, res))
 router.put(
   "/update/:id",
-  isAdmin,
   verifyToken,
+  verifyAdmin,
   checkID,
   duplicateTitleArrives,
   (req, res) => recipeService.update(req, res),
 )
-router.delete("/delete/:id", isAdmin, verifyToken, checkID, (req, res) =>
+router.delete("/delete/:id", verifyToken, verifyAdmin, checkID, (req, res) =>
   recipeService.delete(req, res),
 )
 

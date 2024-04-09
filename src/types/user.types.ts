@@ -11,3 +11,8 @@ export interface Credentials {
   email: string
   password: string
 }
+
+export interface TokenPayload {
+  id: string
+  isAdmin: boolean
+}
