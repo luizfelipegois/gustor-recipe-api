@@ -258,7 +258,7 @@
       }
     },
     "/user/delete/{id}": {
-      "put": {
+      "delete": {
         "tags": ["User"],
         "description": "Delete user by ID",
         "security": [{ "ApiKeyAuth": [] }],
