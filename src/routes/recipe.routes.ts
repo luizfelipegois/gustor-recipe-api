@@ -7,11 +7,10 @@ const router: Router = Router()
 const recipeService = new RecipeService()
 const { checkID, checkIfYouHaveMandatoryFields, duplicateTitleArrives } =
   RecipeMiddlewares
-const { verifyAdmin, verifyToken } = authMiddlewares
+const { verifyAdmin } = authMiddlewares
 
 router.post(
   "/create",
-  verifyToken,
   verifyAdmin,
   checkIfYouHaveMandatoryFields,
   duplicateTitleArrives,
@@ -21,13 +20,12 @@ router.get("/find", (req, res) => recipeService.findAll(req, res))
 router.get("/find/:id", checkID, (req, res) => recipeService.findById(req, res))
 router.put(
   "/update/:id",
-  verifyToken,
   verifyAdmin,
   checkID,
   duplicateTitleArrives,
   (req, res) => recipeService.update(req, res),
 )
-router.delete("/delete/:id", verifyToken, verifyAdmin, checkID, (req, res) =>
+router.delete("/delete/:id", verifyAdmin, checkID, (req, res) =>
   recipeService.delete(req, res),
 )
 

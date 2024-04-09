@@ -22,21 +22,15 @@ export default class RecipeMiddlewares {
     res: Response,
     next: NextFunction,
   ) {
-    if (!req.body) {
-      return res
-        .status(HTTP_STATUS.BAD_REQUEST)
-        .json({ error: "Missing request body" })
-    }
-
-    // Adicione esta linha para definir o campo assessments como um array vazio se estiver ausente
     req.body.assessments = req.body.assessments || []
 
     const missingFields = requiredFields.filter((field) => !(field in req.body))
 
     if (missingFields.length > 0) {
-      return res
-        .status(HTTP_STATUS.BAD_REQUEST)
-        .json({ error: `Missing fields: ${missingFields.join(", ")}` })
+      return res.status(HTTP_STATUS.BAD_REQUEST).json({
+        error: true,
+        message: `Missing fields: ${missingFields.join(", ")}`,
+      })
     }
 
     const invalidFields = requiredFields.filter((field) => {
@@ -54,7 +48,6 @@ export default class RecipeMiddlewares {
             req.body[field].some((item: Step) => !isValidStep(item))
           )
         case "assessments":
-          // Aceitar array vazio como válido
           return !Array.isArray(req.body[field])
         default:
           return typeof req.body[field] !== "string"
@@ -81,7 +74,7 @@ export default class RecipeMiddlewares {
 
       if (recipe) {
         res
-          .status(HTTP_STATUS.BAD_REQUEST)
+          .status(HTTP_STATUS.CONFLICT)
           .json({ message: "Recipe already registered", error: true })
         return
       }
@@ -104,7 +97,7 @@ export default class RecipeMiddlewares {
       if (!recipe) {
         res
           .status(HTTP_STATUS.NOT_FOUND)
-          .json({ message: "Recipe not found", error: true })
+          .json({ error: true, message: "Recipe not found" })
         return
       }
 

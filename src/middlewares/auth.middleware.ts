@@ -13,7 +13,7 @@ dotenv.config()
 const SECRET_KEY = process.env.SECRET_KEY
 
 export default class authMiddlewares {
-  static async verifyToken(
+  static async verifyAdmin(
     req: Request,
     res: Response,
     next: NextFunction,
@@ -26,41 +26,18 @@ export default class authMiddlewares {
       if (!token) {
         res
           .status(HTTP_STATUS.UNAUTHORIZED)
-          .json({ message: "Token not provided", error: true })
+          .json({ error: true, message: "You are not authorized to proceed" })
         return
       }
 
-      const decodedToken = jwt.verify(token, SECRET_KEY!) as TokenPayload
+      const decodedToken =
+        (jwt.verify(token, SECRET_KEY!) as TokenPayload) || undefined
+      const { isAdmin } = (jwt.decode(token) as TokenPayload) || undefined
 
-      if (!decodedToken) {
+      if (!decodedToken || !isAdmin) {
         res
           .status(HTTP_STATUS.UNAUTHORIZED)
-          .json({ message: "Invalid token", error: true })
-        return
-      }
-
-      next()
-    } catch (error) {
-      errorHandler(res, error as Error)
-    }
-  }
-
-  static async verifyAdmin(
-    req: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      const token = Array.isArray(req.headers.authorization)
-        ? req.headers.authorization[0]
-        : req.headers.authorization
-
-      const { isAdmin } = jwt.decode(token) as TokenPayload
-
-      if (!isAdmin) {
-        res
-          .status(HTTP_STATUS.UNAUTHORIZED)
-          .json({ message: "You are not authorized to proceed", error: true })
+          .json({ error: true, message: "You are not authorized to proceed" })
         return
       }
 
@@ -78,27 +55,16 @@ export default class authMiddlewares {
     try {
       const { email, password }: Credentials = body
 
-      if (!email || !password) {
-        res
-          .status(HTTP_STATUS.BAD_REQUEST)
-          .json({ message: "Email and password are required", error: true })
-        return
-      }
-
       const user = await userModel.findUserByEmail(email)
-      if (!user) {
+      const isPasswordValid = bcrypt.compare(
+        password,
+        user ? user.password : "",
+      )
+
+      if (!isPasswordValid || !user) {
         res
           .status(HTTP_STATUS.UNAUTHORIZED)
-          .json({ message: "User not found", error: true })
-        return
-      }
-
-      const isPasswordValid = await bcrypt.compare(password, user.password)
-
-      if (!isPasswordValid) {
-        res
-          .status(HTTP_STATUS.UNAUTHORIZED)
-          .json({ message: "Invalid password", error: true })
+          .json({ message: "Invalid credentials", error: true })
         return
       }
 
@@ -108,47 +74,18 @@ export default class authMiddlewares {
     }
   }
 
-  static async validateFullName(
-    { body }: Request,
-    res: Response,
-    next: NextFunction,
-  ): Promise<void> {
-    try {
-      const { fullName } = body
-
-      if (!fullName || fullName.length < 3 || !fullNameRegex.test(fullName)) {
-        res
-          .status(HTTP_STATUS.BAD_REQUEST)
-          .json({ message: "Invalid Full Name", error: true })
-        return
-      }
-
-      next()
-    } catch (error) {
-      errorHandler(res, error as Error)
-    }
-  }
-
-  static async validateEmail(
+  static async checkRegisteredEmail(
     { body }: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
     try {
       const { email } = body
-
-      if (!email || !emailRegex.test(email)) {
-        res
-          .status(HTTP_STATUS.BAD_REQUEST)
-          .json({ message: "Invalid email format", error: true })
-        return
-      }
-
       const user = await userModel.findUserByEmail(email)
 
       if (user) {
         res
-          .status(HTTP_STATUS.BAD_REQUEST)
+          .status(HTTP_STATUS.CONFLICT)
           .json({ message: "Email already registered", error: true })
         return
       }
@@ -159,18 +96,26 @@ export default class authMiddlewares {
     }
   }
 
-  static async validatePassword(
+  static async validateInput(
     { body }: Request,
     res: Response,
     next: NextFunction,
   ): Promise<void> {
     try {
-      const { password } = body
+      const { fullName, email, password } = body
 
-      if (!password || !passwordRegex.test(password)) {
+      if (
+        !fullName ||
+        fullName.length < 3 ||
+        !fullNameRegex.test(fullName) ||
+        !email ||
+        !emailRegex.test(email) ||
+        !password ||
+        !passwordRegex.test(password)
+      ) {
         res.status(HTTP_STATUS.BAD_REQUEST).json({
           message:
-            "Invalid password, check that the password is at least 8 characters long and includes at least one lowercase character, one uppercase character, one digit, and one special character (@, $, !, %, *, ?, or &)",
+            "Check correct formatting of the full name and email, and whether the password contains: uppercase, lowercase, number and special character",
           error: true,
         })
         return

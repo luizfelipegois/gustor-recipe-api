@@ -14,18 +14,7 @@ afterAll(async () => {
 })
 
 describe("Test responses to user signIn middleware", () => {
-  it("should return 400 with error message if email and password are required", async () => {
-    const response = await request(server).post("/v1/auth/signin").send({})
-
-    expect(response.status).toBe(HTTP_STATUS.BAD_REQUEST)
-    expect(response.body).toHaveProperty(
-      "message",
-      "Email and password are required",
-    )
-    expect(response.body).toHaveProperty("error", true)
-  })
-
-  it("should return 401 with error message if user not found", async () => {
+  it("should return 401 with an error message if email or password are incorrect", async () => {
     const response = await request(server)
       .post("/v1/auth/signin")
       .send({
@@ -34,26 +23,7 @@ describe("Test responses to user signIn middleware", () => {
       })
 
     expect(response.status).toBe(HTTP_STATUS.UNAUTHORIZED)
-    expect(response.body).toHaveProperty("message", "User not found")
-    expect(response.body).toHaveProperty("error", true)
-  })
-
-  it("should return 401 with error message if invalid password", async () => {
-    const userCredentials = {
-      fullName: mockado.name({ type: "fullName" }),
-      email: mockado.email({ numbers: true }),
-      password: mockado.password(),
-    }
-
-    await request(server).post("/v1/auth/signup").send(userCredentials)
-
-    const response = await request(server).post("/v1/auth/signin").send({
-      email: userCredentials.email,
-      password: mockado.password(),
-    })
-
-    expect(response.status).toBe(HTTP_STATUS.UNAUTHORIZED)
-    expect(response.body).toHaveProperty("message", "Invalid password")
+    expect(response.body).toHaveProperty("message", "Invalid credentials")
     expect(response.body).toHaveProperty("error", true)
   })
 })

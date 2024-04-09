@@ -9,7 +9,7 @@ export default class RecipeService {
       await recipeModel.createRecipe(body)
       res
         .status(HTTP_STATUS.CREATED)
-        .json({ message: "Recipe created successfully", error: false })
+        .json({ error: false, message: "Recipe created successfully" })
     } catch (error) {
       errorHandler(res, error as Error)
     }
@@ -21,7 +21,7 @@ export default class RecipeService {
       const queryNew = req.query.new as string | undefined
       let recipes
 
-      if (queryNew) {
+      if (queryNew === "true") {
         recipes = await recipeModel.findNewsRecipes()
       } else if (queryCategory) {
         recipes = await recipeModel.findRecipesByCategory(queryCategory)
@@ -30,9 +30,9 @@ export default class RecipeService {
       }
 
       res.status(HTTP_STATUS.OK).json({
+        error: false,
         message: `Total recipes found: ${recipes.length}`,
         recipes,
-        error: false,
       })
     } catch (error) {
       errorHandler(res, error as Error)
@@ -44,8 +44,9 @@ export default class RecipeService {
       const { id } = req.params
       const response = await recipeModel.findRecipeById(id)
       res.status(HTTP_STATUS.OK).json({
-        recipe: response,
         error: false,
+        message: "Successfully found cooking recipe",
+        recipe: response,
       })
     } catch (error) {
       errorHandler(res, error as Error)
@@ -57,8 +58,8 @@ export default class RecipeService {
       const { id } = req.params
       await recipeModel.updateRecipe(id, req.body)
       res.status(HTTP_STATUS.OK).json({
-        message: "Recipe updated successfully",
         error: false,
+        message: "Recipe updated successfully",
       })
     } catch (error) {
       errorHandler(res, error as Error)
@@ -70,8 +71,8 @@ export default class RecipeService {
       const { id } = req.params
       await recipeModel.deleteRecipe(id)
       res.status(HTTP_STATUS.OK).json({
-        message: "Recipe deleted successfully",
         error: false,
+        message: "Recipe deleted successfully",
       })
     } catch (error) {
       errorHandler(res, error as Error)

@@ -4,19 +4,11 @@ import authMiddlewares from "../middlewares/auth.middleware"
 
 const router: Router = Router()
 const authService = new AuthService()
-const {
-  validateFullName,
-  validateEmail,
-  validatePassword,
-  validateCredentials,
-} = authMiddlewares
+const { validateInput, validateCredentials, checkRegisteredEmail } =
+  authMiddlewares
 
-router.post(
-  "/signup",
-  validateFullName,
-  validateEmail,
-  validatePassword,
-  (req, res) => authService.register(req, res),
+router.post("/signup", validateInput, checkRegisteredEmail, (req, res) =>
+  authService.register(req, res),
 )
 router.post("/signin", validateCredentials, (req, res) =>
   authService.login(req, res),
