@@ -4,6 +4,7 @@ import cors = require("cors")
 import swaggerUi = require("swagger-ui-express")
 import swaggerDocument = require("../swagger.json")
 import authRoutes from "./routes/auth.routes"
+import userRoutes from "./routes/user.routes"
 import recipeRoutes from "./routes/recipe.routes"
 
 const server = express()
@@ -22,6 +23,7 @@ server.get("/v1", (req: Request, res: Response) =>
   res.status(200).json({ status: "OK" }),
 )
 server.use("/v1/auth", authRoutes)
+server.use("/v1/user", userRoutes)
 server.use("/v1/recipe", recipeRoutes)
 
 export default server

@@ -12,7 +12,7 @@ dotenv.config()
 
 const SECRET_KEY = process.env.SECRET_KEY
 
-export default class authMiddlewares {
+export default class AuthMiddlewares {
   static async verifyAdmin(
     req: Request,
     res: Response,
@@ -47,6 +47,39 @@ export default class authMiddlewares {
     }
   }
 
+  static async verifyToken(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const token = Array.isArray(req.headers.authorization)
+        ? req.headers.authorization[0]
+        : req.headers.authorization
+
+      if (!token) {
+        res
+          .status(HTTP_STATUS.UNAUTHORIZED)
+          .json({ error: true, message: "You are not authorized to proceed" })
+        return
+      }
+
+      const decodedToken =
+        (jwt.verify(token, SECRET_KEY!) as TokenPayload) || undefined
+
+      if (!decodedToken) {
+        res
+          .status(HTTP_STATUS.UNAUTHORIZED)
+          .json({ error: true, message: "You are not authorized to proceed" })
+        return
+      }
+
+      next()
+    } catch (error) {
+      errorHandler(res, error as Error)
+    }
+  }
+
   static async validateCredentials(
     { body }: Request,
     res: Response,
@@ -56,12 +89,12 @@ export default class authMiddlewares {
       const { email, password }: Credentials = body
 
       const user = await userModel.findUserByEmail(email)
-      const isPasswordValid = bcrypt.compare(
+      const isPasswordValid = await bcrypt.compare(
         password,
         user ? user.password : "",
       )
 
-      if (!isPasswordValid || !user) {
+      if (!isPasswordValid) {
         res
           .status(HTTP_STATUS.UNAUTHORIZED)
           .json({ message: "Invalid credentials", error: true })
