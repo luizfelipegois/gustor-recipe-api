@@ -22,7 +22,7 @@ jobs:
       run: npm run build
 
     - name: Set up environment
-        run: echo "NODE_ENV=development" >> $GITHUB_ENV
+        run: cat > .env
 
     - name: Set up .env variables
       run: |
