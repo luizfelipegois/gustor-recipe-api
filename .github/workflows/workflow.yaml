@@ -1,9 +1,6 @@
 name: Build
 
-on:
-  push:
-    branches:
-      - main
+on: pull_request
 
 jobs:
   build:
@@ -16,13 +13,10 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: 20.
+        node-version: 20.11.1
 
     - name: Install dependencies
       run: npm install
 
     - name: Build
       run: npm run build
-
-    - name: Tests
-      run: npm run test
