@@ -7,10 +7,10 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      DB_USER: ${{ variables.DBUSER }}
-      DB_PASSWORD: ${{ variables.DBPASSWORD }}
-      DB_COLLECTION: ${{ variables.DBCOLLECTION }}
-      SECRET_KEY: ${{ variables.SECRET_KEY }}
+      DB_USER: ${{ secrets.DBUSER }}
+      DB_PASSWORD: ${{ secrets.DBPASSWORD }}
+      DB_COLLECTION: ${{ secrets.DBCOLLECTION }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
 
     steps:
     - name: Checkout repository
