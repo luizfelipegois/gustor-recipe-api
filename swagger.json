@@ -18,15 +18,15 @@
   "tags": [
     {
       "name": "Auth",
-      "description": "Everything about your authentication users"
+      "description": "All routes and information to authenticate a user"
     },
     {
       "name": "User",
-      "description": "All about user data"
+      "description": "All routes and information for working with data from one or more users"
     },
     {
       "name": "Recipe",
-      "description": "Everything about your cooking recipes"
+      "description": "All routes and information for working with data from one or more recipes"
     }
   ],
   "paths": {
@@ -81,7 +81,7 @@
     "/auth/signin": {
       "post": {
         "tags": ["Auth"],
-        "description": "Authenticates the user if the information is correct",
+        "description": "Login de usuário",
         "requestBody": {
           "description": "Data expected to authenticate a user",
           "content": {
