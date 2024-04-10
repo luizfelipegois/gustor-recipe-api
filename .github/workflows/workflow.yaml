@@ -22,14 +22,13 @@ jobs:
       run: npm run build
 
     - name: Set up environment
-        run: cat > .env
-
-    - name: Set up .env variables
       run: |
-        echo "DBUSER=${{ secrets.DB_USER }}" >> .env
-        echo "DBPASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
-        echo "DBCOLLECTION=${{ secrets.DB_COLLECTION }}" >> .env
-        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+        cat > .env <<EOF
+        DBUSER=${{ secrets.DB_USER }}
+        DBPASSWORD=${{ secrets.DB_PASSWORD }}
+        DBCOLLECTION=${{ secrets.DB_COLLECTION }}
+        SECRET_KEY=${{ secrets.SECRET_KEY }}
+        EOF
 
     - name: Tests
       run: npm run test
