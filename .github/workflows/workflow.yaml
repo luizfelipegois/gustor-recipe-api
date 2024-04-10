@@ -6,12 +6,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    env:
-      DB_USER: ${{ secrets.DBUSER }}
-      DB_PASSWORD: ${{ secrets.DBPASSWORD }}
-      DB_COLLECTION: ${{ secrets.DBCOLLECTION }}
-      SECRET_KEY: ${{ secrets.SECRET_KEY }}
-
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
@@ -26,6 +20,16 @@ jobs:
 
     - name: Build
       run: npm run build
+
+    - name: Set up environment
+        run: echo "NODE_ENV=development" >> $GITHUB_ENV
+
+    - name: Set up .env variables
+      run: |
+        echo "DBUSER=${{ secrets.DB_USER }}" >> .env
+        echo "DBPASSWORD=${{ secrets.DB_PASSWORD }}" >> .env
+        echo "DBCOLLECTION=${{ secrets.DB_COLLECTION }}" >> .env
+        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
 
     - name: Tests
       run: npm run test
