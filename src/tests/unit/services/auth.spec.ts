@@ -1,9 +1,9 @@
 import request = require("supertest")
 import mockado = require("mockado")
 import mongoose from "mongoose"
-import server from "../../../src"
-import { connectDatabase } from "../../../src/database/database"
-import { HTTP_STATUS } from "../../../src/helpers/constants"
+import server from "../../../../src"
+import { connectDatabase } from "../../../../src/database/database"
+import { HTTP_STATUS } from "../../../../src/helpers/constants"
 
 beforeAll(async () => {
   await connectDatabase()

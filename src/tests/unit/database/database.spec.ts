@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
 
-import { connectDatabase } from "../../../src/database/database"
+import { connectDatabase } from "../../../../src/database/database"
 
 describe("Database Connection", () => {
   beforeAll(async () => {
