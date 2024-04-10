@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const recipe_service_1 = require("../services/recipe.service");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const recipe_middleware_1 = require("../middlewares/recipe.middleware");
+const router = (0, express_1.Router)();
+const recipeService = new recipe_service_1.default();
+const { checkID, checkIfYouHaveMandatoryFields, duplicateTitleArrives } = recipe_middleware_1.default;
+const { verifyAdmin } = auth_middleware_1.default;
+router.post("/create", verifyAdmin, checkIfYouHaveMandatoryFields, duplicateTitleArrives, (req, res) => recipeService.register(req, res));
+router.get("/find", (req, res) => recipeService.findAll(req, res));
+router.get("/find/:id", checkID, (req, res) => recipeService.findById(req, res));
+router.put("/update/:id", verifyAdmin, checkID, duplicateTitleArrives, (req, res) => recipeService.update(req, res));
+router.delete("/delete/:id", verifyAdmin, checkID, (req, res) => recipeService.delete(req, res));
+exports.default = router;

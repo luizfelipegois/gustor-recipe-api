@@ -18,11 +18,15 @@
   "tags": [
     {
       "name": "Auth",
-      "description": "Everything about your authentication users"
+      "description": "All routes and information to authenticate a user"
+    },
+    {
+      "name": "User",
+      "description": "All routes and information for working with data from one or more users"
     },
     {
       "name": "Recipe",
-      "description": "Everything about your cooking recipes"
+      "description": "All routes and information for working with data from one or more recipes"
     }
   ],
   "paths": {
@@ -77,7 +81,7 @@
     "/auth/signin": {
       "post": {
         "tags": ["Auth"],
-        "description": "Authenticates the user if the information is correct",
+        "description": "Login de usuário",
         "requestBody": {
           "description": "Data expected to authenticate a user",
           "content": {
@@ -105,6 +109,198 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ResponseUserUnauthorized"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/find": {
+      "get": {
+        "tags": ["User"],
+        "description": "Find all users",
+        "security": [{ "ApiKeyAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAllUsers"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseRecipeUnauthorized"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/find/{id}": {
+      "get": {
+        "tags": ["User"],
+        "description": "Find user by ID",
+        "security": [{ "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Specify the ID of the desired user",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserById"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseRecipeUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/update/{id}": {
+      "put": {
+        "tags": ["User"],
+        "description": "Update user by ID",
+        "security": [{ "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Specify the ID of the desired user",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Data expected to authenticate a user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestUserUpdated"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserUpdated"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseRecipeUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserNotFound"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user/delete/{id}": {
+      "delete": {
+        "tags": ["User"],
+        "description": "Delete user by ID",
+        "security": [{ "ApiKeyAuth": [] }],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "Specify the ID of the desired user",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserDelete"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "UNAUTHORIZED",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseRecipeUnauthorized"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "NOT FOUND",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseUserNotFound"
                 }
               }
             }
@@ -394,6 +590,23 @@
         },
         "required": ["email", "password"]
       },
+      "RequestUserUpdated": {
+        "type": "object",
+        "properties": {
+          "fullName": {
+            "type": "string",
+            "description": "User full name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User password"
+          }
+        }
+      },
       "RequestRecipeCreated": {
         "type": "object",
         "properties": {
@@ -499,6 +712,36 @@
             "type": "string",
             "description": "Message user registered successfully",
             "example": "User registered successfully"
+          }
+        }
+      },
+      "ResponseUserUpdated": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "boolean",
+            "description": "boolean to determine whether there was an error or not",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "description": "Message user updated successfully",
+            "example": "User updated successfully"
+          }
+        }
+      },
+      "ResponseUserDelete": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "boolean",
+            "description": "boolean to determine whether there was an error or not",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "description": "Message user deleted successfully",
+            "example": "User deleted successfully"
           }
         }
       },
@@ -1059,6 +1302,124 @@
                 "__v": 0
               }
             ]
+          }
+        }
+      },
+      "ResponseAllUsers": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "boolean",
+            "description": "boolean to determine whether there was an error or not",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "description": "Message informing the number of recipes found",
+            "example": "Total users found: 8"
+          },
+          "users": {
+            "type": "array",
+            "description": "Array with users found",
+            "example": [
+              {
+                "fullName": "Jesse Vieira",
+                "email": "jordansiqueira@yahoo.com",
+                "createdAt": "2024-04-08T18:25:13.383Z",
+                "updatedAt": "2024-04-08T18:25:13.383Z",
+                "__v": 0
+              },
+              {
+                "fullName": "Brent Dias",
+                "email": "victorcaldeira@outlook.com",
+                "createdAt": "2024-04-08T18:27:03.343Z",
+                "updatedAt": "2024-04-08T18:27:03.343Z",
+                "__v": 0
+              },
+              {
+                "fullName": "Eric Moreira",
+                "email": "keithgomes8403@hotmail.com",
+                "createdAt": "2024-04-08T18:27:03.535Z",
+                "updatedAt": "2024-04-08T18:27:03.535Z",
+                "__v": 0
+              },
+              {
+                "fullName": "Aria Macedo",
+                "email": "alexteixeira@gmail.com",
+                "createdAt": "2024-04-08T18:27:03.705Z",
+                "updatedAt": "2024-04-08T18:27:03.705Z",
+                "__v": 0
+              },
+              {
+                "fullName": "Jorge Reis",
+                "email": "jeremyteixeira@hotmail.com",
+                "createdAt": "2024-04-08T19:17:43.273Z",
+                "updatedAt": "2024-04-08T19:17:43.273Z",
+                "__v": 0
+              },
+              {
+                "fullName": "Colton Aguiar",
+                "email": "evanmelo@yahoo.com",
+                "createdAt": "2024-04-08T19:17:43.317Z",
+                "updatedAt": "2024-04-08T19:17:43.317Z",
+                "__v": 0
+              },
+              {
+                "fullName": "Joshua Braga",
+                "email": "adrianrocha7511@yahoo.com",
+                "createdAt": "2024-04-08T19:17:43.356Z",
+                "updatedAt": "2024-04-08T19:17:43.356Z",
+                "__v": 0
+              },
+              {
+                "fullName": "Robert Aguiar",
+                "email": "mitchellbezerra@yahoo.com",
+                "createdAt": "2024-04-08T19:18:53.953Z",
+                "updatedAt": "2024-04-08T19:18:53.953Z",
+                "__v": 0
+              }
+            ]
+          }
+        }
+      },
+      "ResponseUserById": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "boolean",
+            "description": "boolean to determine whether there was an error or not",
+            "example": false
+          },
+          "message": {
+            "type": "string",
+            "description": "Message successfully found user",
+            "example": "Successfully found user"
+          },
+          "user": {
+            "type": "string",
+            "description": "user data",
+            "example": {
+              "fullName": "Jesse Vieira",
+              "email": "jordansiqueira@yahoo.com",
+              "createdAt": "2024-04-08T18:25:13.383Z",
+              "updatedAt": "2024-04-08T18:25:13.383Z",
+              "__v": 0
+            }
+          }
+        }
+      },
+      "ResponseUserNotFound": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "boolean",
+            "description": "boolean to determine whether there was an error or not",
+            "example": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Message user not found",
+            "example": "User not found"
           }
         }
       },

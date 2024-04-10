@@ -1,13 +1,13 @@
 import { Router } from "express"
 import RecipeService from "../services/recipe.service"
-import authMiddlewares from "../middlewares/auth.middleware"
+import AuthMiddlewares from "../middlewares/auth.middleware"
 import RecipeMiddlewares from "../middlewares/recipe.middleware"
 
 const router: Router = Router()
 const recipeService = new RecipeService()
 const { checkID, checkIfYouHaveMandatoryFields, duplicateTitleArrives } =
   RecipeMiddlewares
-const { verifyAdmin } = authMiddlewares
+const { verifyAdmin } = AuthMiddlewares
 
 router.post(
   "/create",

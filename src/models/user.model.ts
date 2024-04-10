@@ -36,6 +36,35 @@ class UserModel {
   public async findUserByEmail(email: string): Promise<UserDocument | null> {
     return await this.userModel.findOne({ email })
   }
+
+  public async findAllUsers(): Promise<UserDocument[]> {
+    return await this.userModel
+      .find({}, "-password -isAdmin -_id")
+      .lean()
+      .exec()
+  }
+
+  public async findUserById(id: string): Promise<UserDocument | null> {
+    return await this.userModel
+      .findById(id, "-password -isAdmin -_id")
+      .lean()
+      .exec()
+  }
+
+  public async updateUser(
+    id: string,
+    userData: UserDocument,
+  ): Promise<UserDocument | null> {
+    return await this.userModel.findByIdAndUpdate(
+      id,
+      { $set: userData },
+      { new: true },
+    )
+  }
+
+  public async deleteUser(id: string): Promise<UserDocument | null> {
+    return await this.userModel.findByIdAndDelete(id).lean().exec()
+  }
 }
 
 export const userModel = new UserModel()

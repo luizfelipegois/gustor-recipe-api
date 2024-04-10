@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const user_service_1 = require("../services/user.service");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const user_middleware_1 = require("../middlewares/user.middleware");
+const router = (0, express_1.Router)();
+const userService = new user_service_1.default();
+const { verifyAdmin, verifyToken } = auth_middleware_1.default;
+const { checkID } = user_middleware_1.default;
+router.get("/find", verifyAdmin, (req, res) => userService.findAll(req, res));
+router.get("/find/:id", verifyToken, checkID, (req, res) => userService.findById(req, res));
+router.put("/update/:id", verifyAdmin, checkID, (req, res) => userService.update(req, res));
+router.delete("/delete/:id", verifyAdmin, checkID, (req, res) => userService.delete(req, res));
+exports.default = router;
