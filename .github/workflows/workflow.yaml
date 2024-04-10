@@ -24,9 +24,9 @@ jobs:
     - name: Set up environment
       run: |
         cat > .env <<EOF
-        DBUSER=${{ secrets.DB_USER }}
-        DBPASSWORD=${{ secrets.DB_PASSWORD }}
-        DBCOLLECTION=${{ secrets.DB_COLLECTION }}
+        DBUSER=${{ secrets.DBUSER }}
+        DBPASSWORD=${{ secrets.DBPASSWORD }}
+        DBCOLLECTION=${{ secrets.DBCOLLECTION }}
         SECRET_KEY=${{ secrets.SECRET_KEY }}
         EOF
 
