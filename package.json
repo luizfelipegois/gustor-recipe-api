@@ -1,7 +1,7 @@
 {
-  "name": "api-setup-node-mongodb-typescript-swagger",
-  "version": "1.0.1",
-  "description": "",
+  "name": "gustor-recipe-api",
+  "version": "1.0.0",
+  "description": "API responsible for managing all request processes on the Gustor Recipes website",
   "main": "dist/server.js",
   "scripts": {
     "build": "tsc",
