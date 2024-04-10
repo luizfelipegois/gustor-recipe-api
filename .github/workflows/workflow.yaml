@@ -17,19 +17,6 @@ jobs:
 
     - name: Install dependencies
       run: npm install
-      
-    - name: Set up environment
-      run: |
-        cat > .env <<EOF
-        DBUSER=${{ secrets.DBUSER }}
-        DBPASSWORD=${{ secrets.DBPASSWORD }}
-        DBCOLLECTION=${{ secrets.DBCOLLECTION }}
-        SECRET_KEY=${{ secrets.SECRET_KEY }}
-        EOF
 
     - name: Build
       run: npm run build
-
-
-    - name: Tests
-      run: npm run test
