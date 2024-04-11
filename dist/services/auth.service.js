@@ -37,9 +37,7 @@ class AuthService {
                 const user = yield user_model_1.userModel.findUserByEmail(email);
                 const SECRET_KEY = process.env.SECRET_KEY;
                 if (SECRET_KEY) {
-                    const token = jwt.sign({ id: user === null || user === void 0 ? void 0 : user._id, fullName: user === null || user === void 0 ? void 0 : user.fullName, isAdmin: user === null || user === void 0 ? void 0 : user.isAdmin }, SECRET_KEY, {
-                        expiresIn: "1h",
-                    });
+                    const token = jwt.sign({ id: user === null || user === void 0 ? void 0 : user._id, fullName: user === null || user === void 0 ? void 0 : user.fullName, isAdmin: user === null || user === void 0 ? void 0 : user.isAdmin }, SECRET_KEY);
                     res.status(constants_1.HTTP_STATUS.OK).json({
                         error: false,
                         message: "User successfully authenticated",
