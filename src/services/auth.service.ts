@@ -31,9 +31,6 @@ export default class AuthService {
         const token = jwt.sign(
           { id: user?._id, fullName: user?.fullName, isAdmin: user?.isAdmin },
           SECRET_KEY,
-          {
-            expiresIn: "1h",
-          },
         )
         res.status(HTTP_STATUS.OK).json({
           error: false,
