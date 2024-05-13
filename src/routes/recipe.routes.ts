@@ -7,7 +7,7 @@ const router: Router = Router()
 const recipeService = new RecipeService()
 const { checkID, checkIfYouHaveMandatoryFields, duplicateTitleArrives } =
   RecipeMiddlewares
-const { verifyAdmin } = AuthMiddlewares
+const { verifyAdmin, verifyToken } = AuthMiddlewares
 
 router.post(
   "/create",
@@ -16,8 +16,10 @@ router.post(
   duplicateTitleArrives,
   (req, res) => recipeService.register(req, res),
 )
-router.get("/find", (req, res) => recipeService.findAll(req, res))
-router.get("/find/:id", checkID, (req, res) => recipeService.findById(req, res))
+router.get("/find", verifyToken, (req, res) => recipeService.findAll(req, res))
+router.get("/find/:id", verifyToken, checkID, (req, res) =>
+  recipeService.findById(req, res),
+)
 router.put(
   "/update/:id",
   verifyAdmin,
